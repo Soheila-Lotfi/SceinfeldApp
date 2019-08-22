@@ -74,6 +74,30 @@ app.get("/coolness-chart", function(req, res) {
   );
 });
 
+// Create a `/attitude-chart/:att` route that will display all the actors for a specific type of attitude.
+
+app.get("/attitude-chart/:att", function(req, res) {
+  var att = req.params.att;
+
+  connection.query("SELECT * FROM actors Where ?", { attitude: att }, function(
+    err,
+    result
+  ) {
+    if (err) throw err;
+    var html = "<h1>Actors with attitude of" + att + "</h1>";
+    html += "<ul>";
+
+    for (var i = 0; i < result.length; i++) {
+      html += "<li><p> ID: " + result[i].id + "</p>";
+      html += "<p> Name: " + result[i].name + "</p>";
+      html += "<p> Coolness Points: " + result[i].coolness_points + "</p>";
+      html += "<p>Attitude: " + result[i].attitude + "</p></li>";
+    }
+
+    html += "</ul>";
+    res.send(html);
+  });
+});
 // make the server ready to start
 
 app.listen(PORT, function() {
