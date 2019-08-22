@@ -51,6 +51,29 @@ app.get("/cast", function(req, res) {
   });
 });
 
+//Create a `/coolness-chart` route that will display all the actors and their data ordered by their coolness points.
+
+app.get("/coolness-chart", function(req, res) {
+  connection.query(
+    "SELECT * FROM actors ORDER BY coolness_points DESC",
+    function(err, result) {
+      if (err) throw err;
+      var html = "<h1>Actors ordered by Coolness points</h1>";
+      html += "<ul>";
+
+      for (var i = 0; i < result.length; i++) {
+        html += "<li><p> ID: " + result[i].id + "</p>";
+        html += "<p> Name: " + result[i].name + "</p>";
+        html += "<p> Coolness Points: " + result[i].coolness_points + "</p>";
+        html += "<p>Attitude: " + result[i].attitude + "</p></li>";
+      }
+
+      html += "</ul>";
+      res.send(html);
+    }
+  );
+});
+
 // make the server ready to start
 
 app.listen(PORT, function() {
